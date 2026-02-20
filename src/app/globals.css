@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+.str-chat__message-simple {
+	padding: 2px 12px !important;
+	margin: 0 !important;
+}
+
+.str-chat__message-simple__content-inner {
+	flex-direction: row !important;
+	align-items: flex-start !important;
+	gap: 8px !important;
+	background: transparent !important;
+	border: none !important;
+	padding: 0 !important;
+}
+
+/* 2. Style the Username and Text */
+.str-chat__message-simple__display-name {
+	color: #a855f7 !important; /* Purple from demo */
+	font-weight: 800 !important;
+	font-size: 0.85rem !important;
+	margin: 0 !important;
+	flex-shrink: 0;
+}
+
+.str-chat__message-simple-text-inner {
+	background: transparent !important;
+	border: none !important;
+	padding: 0 !important;
+	color: #efefef !important;
+	font-size: 0.85rem !important;
+	line-height: 1.4 !important;
+	box-shadow: none !important;
+}
+
+/* 3. Style the Timestamp */
+.str-chat__message-simple__timestamp {
+	color: #555 !important;
+	font-size: 0.7rem !important;
+	margin-left: 4px;
+	font-weight: 400;
+}
+
+/* 4. Hide Avatars and Status icons for extra compactness */
+.str-chat__message-simple .str-chat__avatar {
+	width: 20px !important;
+	height: 20px !important;
+	margin-top: 2px;
+}
+
+.str-chat__message-status {
+	display: none !important;
+}
+
+/* 5. Input Bar Styling */
+.str-chat__message-input {
+	background: #1a1a1a !important;
+	border-radius: 8px !important;
+	border: 1px solid #333 !important;
+	padding: 4px 8px !important;
+}
+.str-chat__input-flat {
+	background: transparent !important;
+}
+.str-chat__input-flat--textarea {
+	color: white !important;
+	font-size: 0.85rem !important;
+}
+
+/* 6. Video Player Fix */
+.str-video__video-view {
+	object-fit: cover !important;
+}
+.str-video__livestream-layout {
+	height: 100% !important;
+}
