@@ -20,3 +20,8 @@ interface Ad {
 }
 
 type FeedItem = Call | Ad;
+
+declare module "*.mp4" {
+  const src: string;
+  export default src;
+}

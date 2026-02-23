@@ -24,8 +24,8 @@ import { useRouter } from "next/navigation";
 import { logOut } from "../utils/auth-functions";
 import { useAuth } from "../utils/AuthContext";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
-import { generateSlug, myAd } from "../utils/db-functions";
-import { createChannel } from "@/actions/stream.actions";
+import { generateID, myAd } from "../utils/db-functions";
+import { createChannel } from "@/actions/stream";
 import { useGetLiveStreams } from "../utils/useGetLiveStreams";
 
 export default function TikTokUI() {
@@ -36,6 +36,7 @@ export default function TikTokUI() {
 	const [call, setCall] = useState<Call | null>(null);
 	const { calls } = useGetLiveStreams();
 	const combinedFeed: FeedItem[] = [...calls];
+	console.log("Live streams fetched from Firestore:", calls);
 	if (combinedFeed.length > 0) {
 		combinedFeed.splice(1, 0, myAd);
 	} else {
@@ -61,7 +62,7 @@ export default function TikTokUI() {
 		if (!client || !user)
 			return console.error("Stream Video client is not initialized");
 		try {
-			const call = client.call("livestream", generateSlug(liveForm.title));
+			const call = client.call("livestream", generateID(liveForm.title));
 			if (!call) throw new Error("Failed to create meeting");
 
 			await call.getOrCreate({
@@ -332,8 +333,9 @@ const PostCard = ({ call }: { call: Call }) => (
 		className='relative h-[85vh] aspect-9/16 bg-zinc-900 rounded-xl overflow-hidden shadow-2xl flex items-center justify-center border border-gray-800 group'
 	>
 		<div
-			className={`absolute inset-0 w-full h-full bg-zinc-500 flex items-center justify-center`}
+			className={`absolute inset-0 w-full bg-gray-500 h-full flex items-center justify-center`}
 		>
+			
 			<p className='text-4xl font-bold opacity-20 italic text-black'>
 				{call.id}
 			</p>

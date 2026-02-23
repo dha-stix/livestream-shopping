@@ -14,7 +14,20 @@ import {
 	increment,
 } from "firebase/firestore";
 
-export const generateSlug = (title: string): string => {
+import image1 from "./files/images/image1.jpg";
+import image2 from "./files/images/image2.jpg";
+import image3 from "./files/images/image3.jpg";
+import image4 from "./files/images/image4.jpg";
+
+const IMAGES = [image1, image2, image3, image4];
+// const VIDEOS = ["https://www.youtube.com/shorts/M4sLQh5gA04?feature=share", "https://www.youtube.com/shorts/8f-zYskHkO8?feature=share", "https://www.youtube.com/shorts/pOuNSoukRDI?feature=share"];
+
+/**
+ * 
+ * Generates a URL-friendly slug from livestream title and as the call ID for the stream. It appends 4 random letters to ensure uniqueness.
+ * Example: "My Awesome Stream!" -> "my-awesome-stream-abcd"
+ */
+export const generateID = (title: string): string => {
 	// Convert title to lowercase and replace spaces and non-alphanumerics with hyphens
 	const slug = title
 		.toLowerCase()
@@ -214,3 +227,19 @@ export const checkoutCart = async (cart: CartItem[], sellerID: string) => {
 		throw error;
 	}
 };
+
+/**
+ * Returns a single random picture from the array
+ */
+export const getRandomPicture = () => {
+    const randomIndex = Math.floor(Math.random() * IMAGES.length);
+    return IMAGES[randomIndex];
+};
+
+/**
+ * Returns a single random video from the array
+ */
+// export const getRandomVideo = () => {
+//     const randomIndex = Math.floor(Math.random() * VIDEOS.length);
+//     return VIDEOS[randomIndex];
+// };

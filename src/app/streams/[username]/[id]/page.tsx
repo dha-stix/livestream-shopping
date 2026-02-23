@@ -1,7 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Loader2, MessageSquare, ShoppingBag } from "lucide-react";
 import {
 	StreamCall,
 	StreamTheme,
@@ -13,9 +10,6 @@ import {
 	ParticipantView,
 	useCall,
 } from "@stream-io/video-react-sdk";
-import { useRouter, useParams } from "next/navigation";
-import { useAuth } from "@/app/utils/AuthContext";
-import { useGetStreamClient } from "@/app/utils/useGetStreamClient";
 import {
 	Channel,
 	Chat,
@@ -23,7 +17,13 @@ import {
 	VirtualizedMessageList,
 	Window,
 } from "stream-chat-react";
+import { useGetStreamClient } from "@/app/utils/useGetStreamClient";
+import { Loader2, MessageSquare, ShoppingBag } from "lucide-react";
 import type { Channel as ChannelType } from "stream-chat";
+import { useRouter, useParams } from "next/navigation";
+import { useAuth } from "@/app/utils/AuthContext";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Page() {
 	const { user } = useAuth();
@@ -36,14 +36,19 @@ export default function Page() {
 		);
 	}
 
-	return <StreamPage uid={user.uid} />;
+	return (
+		<StreamPage user={{ id: user.uid, name: user.displayName || "User" }} />
+	);
 }
 
-const StreamPage = ({ uid }: { uid: string }) => {
+const StreamPage = ({ user }: { user: { id: string; name: string } }) => {
 	const { id } = useParams<{ username: string; id: string }>();
 	const videoClient = useStreamVideoClient();
 	const [channel, setChannel] = useState<ChannelType | null>(null);
-	const { client: chatClient } = useGetStreamClient(uid);
+	const { client: chatClient } = useGetStreamClient({
+		id: user.id,
+		name: user.name,
+	});
 
 	const [call, setCall] = useState<Call | null>(null);
 
@@ -104,46 +109,14 @@ const LivestreamContent = () => {
 	return (
 		<div className='flex flex-col w-full h-screen max-h-screen bg-[#080808] text-white overflow-hidden'>
 			{/* 1. HEADER */}
-			<div className='h-14 border-b border-white/10 flex justify-between items-center px-4 shrink-0 bg-[#121212] z-20'>
-				<div className='flex items-center gap-3'>
-					<h1 className='text-sm font-bold truncate max-w-37.5'>
-						{call?.state.custom.title || "Livestream"}
-					</h1>
-					<Link
-						href={`/shop/${username}/products`}
-						target='_blank'
-						className='flex items-center space-x-2 bg-pink-600 hover:bg-pink-700 px-3 py-1 rounded-md transition  font-bold'
-					>
-						<ShoppingBag size={14} />
-						<span>My Shop</span>
-					</Link>
-				</div>
-
-				<div className='flex items-center gap-3'>
-					<button
-						onClick={() => setIsChatOpen(!isChatOpen)}
-						className={`p-2 rounded-md transition ${isChatOpen ? "bg-blue-600" : "bg-white/10"}`}
-					>
-						<MessageSquare size={18} />
-					</button>
-
-					{!isLive ? (
-						<button
-							onClick={handleGoLive}
-							className='bg-red-600 px-4 py-1.5 rounded-full font-bold text-xs uppercase tracking-wider'
-						>
-							Go Live
-						</button>
-					) : (
-						<div className='flex items-center gap-2 bg-red-600/20 px-3 py-1 rounded-full border border-red-600/50'>
-							<span className='w-2 h-2 bg-red-600 rounded-full animate-pulse' />
-							<span className='text-[10px] font-bold text-red-500 uppercase tracking-widest'>
-								Live
-							</span>
-						</div>
-					)}
-				</div>
-			</div>
+			<Header
+				call={call!}
+				username={username}
+				setIsChatOpen={setIsChatOpen}
+				isChatOpen={isChatOpen}
+				isLive={isLive}
+				handleGoLive={handleGoLive}
+			/>
 
 			{/* 2. MAIN BODY (Video + Chat) */}
 			<div className='flex-1 flex overflow-hidden relative'>
@@ -195,8 +168,65 @@ const LivestreamContent = () => {
 				<CallControls onLeave={() => router.push("/")} />
 				<EndCallButton call={call!} />
 			</div>
+		</div>
+	);
+};
 
-			
+const Header = ({
+	call,
+	username,
+	setIsChatOpen,
+	isChatOpen,
+	isLive,
+	handleGoLive,
+}: {
+	call: Call;
+	username: string;
+	setIsChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	isChatOpen: boolean;
+	isLive: boolean;
+	handleGoLive: () => void;
+}) => {
+	return (
+		<div className='h-14 border-b border-white/10 flex justify-between items-center px-4 shrink-0 bg-[#121212] z-20'>
+			<div className='flex items-center gap-3'>
+				<h1 className='text-sm font-bold truncate max-w-37.5'>
+					{call?.state.custom.title || "Livestream"}
+				</h1>
+				<Link
+					href={`/shop/${username}/products`}
+					target='_blank'
+					className='flex items-center space-x-2 bg-pink-600 hover:bg-pink-700 px-3 py-1 rounded-md transition  font-bold'
+				>
+					<ShoppingBag size={14} />
+					<span>My Shop</span>
+				</Link>
+			</div>
+
+			<div className='flex items-center gap-3'>
+				<button
+					onClick={() => setIsChatOpen(!isChatOpen)}
+					className={`p-2 rounded-md transition ${isChatOpen ? "bg-blue-600" : "bg-white/10"}`}
+				>
+					<MessageSquare size={18} />
+				</button>
+
+				{!isLive ? (
+					<button
+						onClick={handleGoLive}
+						className='bg-red-600 px-4 py-1.5 rounded-full font-bold text-xs uppercase tracking-wider'
+					>
+						Go Live
+					</button>
+				) : (
+					<div className='flex items-center gap-2 bg-red-600/20 px-3 py-1 rounded-full border border-red-600/50'>
+						<span className='w-2 h-2 bg-red-600 rounded-full animate-pulse' />
+						<span className='text-[10px] font-bold text-red-500 uppercase tracking-widest'>
+							Live
+						</span>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

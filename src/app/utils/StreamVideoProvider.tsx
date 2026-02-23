@@ -1,8 +1,8 @@
 "use client";
 import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk";
 import { useState, ReactNode, useEffect, useCallback } from "react";
-import { tokenProvider } from "../../actions/stream.actions"
-import { useAuth } from "../utils/AuthContext";
+import { tokenProvider } from "../../actions/stream"
+import { useAuth } from "./AuthContext";
 import { Loader2 } from "lucide-react";
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;

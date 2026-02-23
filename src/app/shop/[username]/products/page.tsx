@@ -10,9 +10,10 @@ import {
 	Globe,
 	ExternalLink,
 } from "lucide-react";
-import { checkoutCart, getProductsByUsername } from "@/app/utils/db-functions";
+import { checkoutCart, getProductsByUsername, getRandomPicture } from "@/app/utils/db-functions";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Page() {
 	const { username } = useParams<{ username: string }>();
@@ -275,7 +276,11 @@ const ProductCard = ({
 			className='group border border-zinc-800 p-6 rounded-2xl bg-zinc-900/40 flex flex-col items-center gap-4 hover:border-zinc-600 transition-all duration-300 hover:bg-zinc-900/60'
 		>
 			<div className='w-full aspect-square bg-zinc-950 rounded-lg flex items-center justify-center border border-zinc-800 group-hover:border-zinc-700 transition-colors'>
-				<ShoppingBag className='text-zinc-800' size={40} />
+				<Image
+					src={getRandomPicture()}
+					alt={product.name}
+					className='w-full h-full object-cover rounded-lg'
+				/>
 			</div>
 			<h3 className='text-lg font-bold'>{product.name}</h3>
 			<p className='text-xl font-bold text-zinc-400'>

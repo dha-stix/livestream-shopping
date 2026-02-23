@@ -47,7 +47,7 @@ export const createToken = async (id: string) => {
 export const createChannel = async (id: string, name: string, uid: string) => {
 	try {
 		//👇🏻 declare channel type
-		const channel = serverClient.channel("livestreamng", id, {
+		const channel = serverClient.channel("livestream", id, {
 			name,
 			members: [uid],
 			created_by_id: uid,

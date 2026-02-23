@@ -1,20 +1,22 @@
 import { useCreateChatClient } from "stream-chat-react";
-import { createToken } from "@/actions/stream.actions";
+import { createToken } from "@/actions/stream";
 import { useCallback } from "react";
 
 export const useGetStreamClient = (
-	id: string
+	user: { id: string; name: string } | null,
 ) => {
 	const tokenProvider = useCallback(async () => {
-		return await createToken(id);
-	}, [id]);
+		return await createToken(user?.id || "");
+	}, [user?.id]);
+
 
 	const client = useCreateChatClient({
 		apiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY!,
 		tokenOrProvider: tokenProvider,
         userData: {
-            id: id, name: "User " + id,
-            image: `https://api.dicebear.com/9.x/pixel-art/svg?seed=${id}`
+            id: user?.id || "",
+            name: user?.name || "User",
+            image:`${process.env.NEXT_PUBLIC_IMAGE_URL}${user?.name}`,
         },
 	});
 

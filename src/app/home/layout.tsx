@@ -1,6 +1,5 @@
-import { AuthProvider } from "../utils/AuthContext";
-import { StreamVideoProvider } from "../(stream)/StreamVideoProvider";
-import { ProtectRoute } from "../utils/ProtectRoute";
+import { StreamVideoProvider } from "../utils/StreamVideoProvider";
+import { ProtectRoute, AuthProvider } from "../utils/AuthContext";
 
 export default function RootLayout({
 	children,

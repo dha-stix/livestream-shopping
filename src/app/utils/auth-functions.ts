@@ -4,7 +4,6 @@ import {
 	signOut,
 	updateProfile,
 } from "firebase/auth";
-import db, { auth } from "./firebase";
 import {
 	collection,
 	query,
@@ -15,8 +14,9 @@ import {
 	serverTimestamp,
 	getDoc,
 } from "firebase/firestore";
+import db, { auth } from "./firebase";
 import { FirebaseError } from "firebase/app";
-import { createStreamUser } from "@/actions/stream.actions";
+import { createStreamUser } from "@/actions/stream";
 
 export const signUp = async (form: FormData) => {
 	const username = (form.get("username") as string).trim().toLowerCase();

@@ -1,5 +1,4 @@
-import { AuthProvider } from "../utils/AuthContext";
-import { ProtectRoute } from "../utils/ProtectRoute";
+import { AuthProvider, ProtectRoute } from "../utils/AuthContext";
 
 export default function RootLayout({
 	children,
